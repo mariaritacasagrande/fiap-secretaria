@@ -1,10 +1,10 @@
-# 📚 FIAP Secretaria – Sistema de Gestão Acadêmica (Desafio Técnico)
+# FIAP Secretaria – Sistema de Gestão Acadêmica (Desafio Técnico)
 
 Este projeto foi desenvolvido como parte do desafio técnico para a vaga de Desenvolvedor PHP da FIAP. A aplicação tem como objetivo permitir o gerenciamento de **alunos**, **turmas** e **matrículas** por parte de um administrador autenticado.
 
 ---
 
-## ✅ Funcionalidades
+## Funcionalidades
 
 - CRUD de Alunos com validações e senhas criptografadas
 - CRUD de Turmas com contagem de alunos e paginação
@@ -17,7 +17,7 @@ Este projeto foi desenvolvido como parte do desafio técnico para a vaga de Dese
 
 ---
 
-## 🧰 Tecnologias utilizadas
+## Tecnologias utilizadas
 
 - PHP 7.4+
 - MySQL
@@ -27,7 +27,7 @@ Este projeto foi desenvolvido como parte do desafio técnico para a vaga de Dese
 
 ---
 
-## 📦 Instalação Local
+## Instalação Local
 
 ### 1. Clone o repositório
 
