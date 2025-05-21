@@ -6,7 +6,6 @@ include BASE_PATH . '/views/partials/header_dashboard.php';
 <div class="container py-4">
     <h1 class="mb-4 fs-3 text-center">Dashboard Geral</h1>
 
-    <!-- Formulário de busca -->
     <div class="mb-4">
         <form id="form-busca-aluno" class="d-flex" onsubmit="return false;">
             <input type="text" id="input-nome-aluno" class="form-control me-2" placeholder="Buscar aluno por nome...">
@@ -14,10 +13,8 @@ include BASE_PATH . '/views/partials/header_dashboard.php';
         </form>
     </div>
 
-    <!-- Resultados AJAX -->
-    <div id="resultado-busca-aluno" class="row g-3 mb-5"></div>
+    <div id="resultado-busca-aluno" class="row g-3"></div>
 
-    <!-- Cards de acesso rápido -->
     <div class="row g-4 justify-content-center">
         <div class="col-12 col-md-6">
             <div class="card shadow-sm h-100">
