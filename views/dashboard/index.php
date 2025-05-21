@@ -40,7 +40,8 @@ include BASE_PATH . '/views/partials/header_dashboard.php';
                 <div class="card-body py-3">
                     <div class="mb-2"><i class="bi bi-person-badge fs-3 text-danger"></i></div>
                     <h6 class="card-title small">Administradores</h6>
-                    <a href="index.php?page=administradores&action=listar" class="btn btn-outline-primary btn-sm">Ver</a>
+                    <a href="index.php?page=administradores&action=listar"
+                        class="btn btn-outline-primary btn-sm">Ver</a>
                 </div>
             </div>
         </div>
