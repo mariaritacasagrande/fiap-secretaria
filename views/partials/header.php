@@ -9,44 +9,39 @@ if (session_status() === PHP_SESSION_NONE) {
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="index.php?page=alunos&action=listar">
+        <!-- Logo link para dashboard -->
+        <a class="navbar-brand fw-bold" href="index.php?page=dashboard&action=index">
             FIAP Secretaria
         </a>
-
-        <button class="navbar-toggler border-0" type="button" id="menuToggle" aria-label="Toggle navigation">
-            <i id="menuIcon" class="bi bi-list fs-2"></i>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" aria-label="Toggle navigation">
+            <i class="bi bi-list fs-2"></i>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarAdmin">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=alunos&action=listar">Alunos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=turmas&action=listar">Turmas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=matriculas&action=criar">Nova Matrícula</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=administradores&action=listar">Administradores</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="index.php?page=dashboard&action=index">Painel</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.php?page=alunos&action=listar">Alunos</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.php?page=turmas&action=listar">Turmas</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.php?page=matriculas&action=criar">Nova Matrícula</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.php?page=administradores&action=listar">Administradores</a></li>
             </ul>
-
             <div class="d-flex align-items-center flex-wrap gap-2">
-                <a href="<?php echo 'index.php?page=administradores&action=editar&id=' . ($_SESSION['admin_id'] ?? 0); ?>"
-                   class="text-decoration-none text-muted small">
-                    Olá, <strong><?php echo htmlspecialchars($_SESSION['admin_nome'] ?? 'Administrador'); ?></strong>
-                </a>
-                <a href="index.php?page=auth&action=logout" class="btn btn-outline-danger btn-sm">Sair</a>
+                <?php if (!empty($_SESSION['admin_logado']) && !empty($_SESSION['admin_id']) && !empty($_SESSION['admin_nome'])): ?>
+                    <a href="index.php?page=administradores&action=editar&id=<?= htmlspecialchars($_SESSION['admin_id']) ?>"
+                       class="text-decoration-none text-muted small">
+                        Olá, <strong><?= htmlspecialchars($_SESSION['admin_nome']) ?></strong>
+                    </a>
+                    <a href="index.php?page=auth&action=logout" class="btn btn-outline-danger btn-sm">Sair</a>
+                <?php else: ?>
+                    <a href="index.php?page=auth&action=login" class="btn btn-outline-primary btn-sm">Entrar</a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </nav>
 
 <script>
-    const toggleBtn = document.getElementById('menuToggle');
-    const icon = document.getElementById('menuIcon');
+    const toggleBtn = document.querySelector('.navbar-toggler');
+    const icon = toggleBtn.querySelector('i');
     const menu = document.getElementById('navbarAdmin');
 
     toggleBtn.addEventListener('click', () => {
