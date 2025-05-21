@@ -61,9 +61,9 @@ fiap-secretaria/
 - Copie o projeto para a pasta htdocs do XAMPP
 
 3. Importe o banco de dados:
-   - Acesse o `phpMyAdmin` ou o terminal MySQL.
-   - Crie o banco de dados com o nome `fiap_secretaria`.
-   - Importe o arquivo `dump.sql` contido no projeto.
+- Acesse o `phpMyAdmin` ou o terminal MySQL.
+- Crie o banco de dados com o nome `fiap_secretaria`.
+- Importe o arquivo `dump.sql` contido no projeto.
 
 4. Configure o acesso ao banco:
    Edite o arquivo `config/database.php` com suas credenciais locais:
