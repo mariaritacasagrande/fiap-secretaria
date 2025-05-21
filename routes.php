@@ -10,14 +10,16 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // 1) Controle de acesso: se não estiver logado e não for rota de auth, manda para login
-if (empty($_SESSION['admin_logado']) 
-    && !(isset($_GET['page']) && $_GET['page'] === 'auth')) {
+if (
+    empty($_SESSION['admin_logado'])
+    && !(isset($_GET['page']) && $_GET['page'] === 'auth')
+) {
     header('Location: index.php?page=auth&action=login');
     exit;
 }
 
 // 2) Define página e ação padrão
-$page   = $_GET['page']   ?? 'dashboard';
+$page = $_GET['page'] ?? 'dashboard';
 $action = $_GET['action'] ?? 'index';
 
 switch ($page) {
