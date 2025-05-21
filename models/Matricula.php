@@ -1,81 +1,78 @@
 <?php
 
-require_once BASE_PATH . '/config/database.php';
+/**
+ * Sistema desenvolvido por Maria Rita Casagrande
+ * © 2025 Maria Rita Casagrande - Todos os direitos reservados
+ * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
+ */
+
+require_once __DIR__ . '/../config/Database.php';
 
 class Matricula
 {
-    private $conn;
-
-    public function __construct()
+    public function listar($pagina = 1, $limite = 10)
     {
-        $db = new Database();
-        $this->conn = $db->connect();
+        $offset = ($pagina - 1) * $limite;
+        $conn = (new Database())->connect();
+        $query = "SELECT m.*, a.nome AS nome_aluno, t.nome AS nome_turma
+                  FROM matriculas m
+                  JOIN alunos a ON m.aluno_id = a.id
+                  JOIN turmas t ON m.turma_id = t.id
+                  ORDER BY a.nome ASC
+                  LIMIT :limite OFFSET :offset";
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function listarPorTurma($turmaId)
+    public function totalPaginas($limite = 10)
     {
-        $sql = "
-            SELECT a.nome, a.email, a.cpf, m.criado_em
-            FROM matriculas m
-            INNER JOIN alunos a ON a.id = m.aluno_id
-            WHERE m.turma_id = :turma_id
-            ORDER BY a.nome ASC
-        ";
+        $conn = (new Database())->connect();
+        $stmt = $conn->query("SELECT COUNT(*) AS total FROM matriculas");
+        $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+        return ceil($total / $limite);
+    }
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':turma_id', $turmaId, PDO::PARAM_INT);
-        $stmt->execute();
+    public function listarAlunos()
+    {
+        $conn = (new Database())->connect();
+        $stmt = $conn->query("SELECT * FROM alunos ORDER BY nome ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function listarTurmas()
     {
-        $stmt = $this->conn->query("SELECT id, nome FROM turmas ORDER BY nome ASC");
+        $conn = (new Database())->connect();
+        $stmt = $conn->query("SELECT * FROM turmas ORDER BY nome ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function listarAlunos()
+    public function buscarPorId($id)
     {
-        $stmt = $this->conn->query("SELECT id, nome FROM alunos ORDER BY nome ASC");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = (new Database())->connect();
+        $stmt = $conn->prepare("SELECT * FROM matriculas WHERE id = :id");
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function matricular($alunoId, $turmaId)
+    public function salvar($dados)
     {
-        if ($this->jaMatriculado($alunoId, $turmaId)) {
-            throw new Exception("O aluno já está matriculado nesta turma.");
-        }
-
-        $sql = "INSERT INTO matriculas (aluno_id, turma_id) VALUES (:aluno_id, :turma_id)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':aluno_id', $alunoId, PDO::PARAM_INT);
-        $stmt->bindValue(':turma_id', $turmaId, PDO::PARAM_INT);
+        $conn = (new Database())->connect();
+        $query = "INSERT INTO matriculas (aluno_id, turma_id) VALUES (:aluno_id, :turma_id)";
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':aluno_id', $dados['aluno_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':turma_id', $dados['turma_id'], PDO::PARAM_INT);
         return $stmt->execute();
     }
 
-    private function jaMatriculado($alunoId, $turmaId)
+    public function excluir($id)
     {
-        $sql = "SELECT 1 FROM matriculas WHERE aluno_id = :aluno_id AND turma_id = :turma_id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':aluno_id', $alunoId, PDO::PARAM_INT);
-        $stmt->bindValue(':turma_id', $turmaId, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch() !== false;
-    }
-
-    public function listarTurmasDoAluno($alunoId)
-    {
-        $sql = "
-            SELECT t.nome, t.descricao, m.criado_em
-            FROM matriculas m
-            INNER JOIN turmas t ON t.id = m.turma_id
-            WHERE m.aluno_id = :aluno_id
-            ORDER BY t.nome ASC
-        ";
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':aluno_id', $alunoId, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = (new Database())->connect();
+        $stmt = $conn->prepare("DELETE FROM matriculas WHERE id = :id");
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
     }
 }

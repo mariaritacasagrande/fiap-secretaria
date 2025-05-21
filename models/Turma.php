@@ -1,95 +1,79 @@
 <?php
 
-require_once BASE_PATH . '/config/database.php';
+/**
+ * Sistema desenvolvido por Maria Rita Casagrande
+ * © 2025 Maria Rita Casagrande - Todos os direitos reservados
+ * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
+ */
+
+require_once __DIR__ . '/../config/Database.php';
 
 class Turma
 {
-    private $conn;
-
-    public function __construct()
+    public function todas()
     {
-        $db = new Database();
-        $this->conn = $db->connect();
+        return $this->listar();
     }
 
-    // Retorna turmas paginadas (10 por página) com contagem de alunos
-    public function todas($pagina = 1)
+    public function listar()
     {
-        $limite = 10;
-        $offset = ($pagina - 1) * $limite;
-
-        $sql = "
+        $conn = (new Database())->connect();
+        $query = "
             SELECT 
                 t.*, 
-                COUNT(m.id) AS total_alunos 
+                COUNT(m.id) AS total_alunos
             FROM turmas t
             LEFT JOIN matriculas m ON m.turma_id = t.id
             GROUP BY t.id
             ORDER BY t.nome ASC
-            LIMIT :limite OFFSET :offset
         ";
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
-
+        $stmt = $conn->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function salvar($dados)
+    public function totalPaginas($limitePorPagina = 10)
     {
-        $this->validar($dados);
-
-        $sql = "INSERT INTO turmas (nome, descricao) VALUES (:nome, :descricao)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':nome', $dados['nome']);
-        $stmt->bindValue(':descricao', $dados['descricao']);
-        return $stmt->execute();
+        $conn = (new Database())->connect();
+        $stmt = $conn->query("SELECT COUNT(*) AS total FROM turmas");
+        $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+        return ceil($total / $limitePorPagina);
     }
 
     public function buscarPorId($id)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM turmas WHERE id = :id");
+        $conn = (new Database())->connect();
+        $stmt = $conn->prepare("SELECT * FROM turmas WHERE id = :id");
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function atualizar($dados)
+    public function salvar($dados)
     {
-        $this->validar($dados);
-
-        $sql = "UPDATE turmas SET nome = :nome, descricao = :descricao WHERE id = :id";
-        $stmt = $this->conn->prepare($sql);
+        $conn = (new Database())->connect();
+        $query = "INSERT INTO turmas (nome, codigo) VALUES (:nome, :codigo)";
+        $stmt = $conn->prepare($query);
         $stmt->bindValue(':nome', $dados['nome']);
-        $stmt->bindValue(':descricao', $dados['descricao']);
-        $stmt->bindValue(':id', $dados['id'], PDO::PARAM_INT);
+        $stmt->bindValue(':codigo', $dados['codigo']);
+        return $stmt->execute();
+    }
+
+    public function atualizar($id, $dados)
+    {
+        $conn = (new Database())->connect();
+        $query = "UPDATE turmas SET nome = :nome, codigo = :codigo WHERE id = :id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':nome', $dados['nome']);
+        $stmt->bindValue(':codigo', $dados['codigo']);
+        $stmt->bindValue(':id', $id);
         return $stmt->execute();
     }
 
     public function excluir($id)
     {
-        $stmt = $this->conn->prepare("DELETE FROM turmas WHERE id = :id");
+        $conn = (new Database())->connect();
+        $stmt = $conn->prepare("DELETE FROM turmas WHERE id = :id");
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
-    }
-
-    private function validar($dados)
-    {
-        if (strlen(trim($dados['nome'])) < 3) {
-            throw new Exception("O nome da turma deve ter no mínimo 3 caracteres.");
-        }
-
-        if (empty($dados['descricao'])) {
-            throw new Exception("A descrição da turma é obrigatória.");
-        }
-    }
-
-    public function totalPaginas()
-    {
-        $stmt = $this->conn->query("SELECT COUNT(*) AS total FROM turmas");
-        $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-        return ceil($total / 10);
     }
 }

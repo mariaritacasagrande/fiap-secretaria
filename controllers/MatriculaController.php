@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Sistema desenvolvido por Maria Rita Casagrande
+ * © 2025 Maria Rita Casagrande - Todos os direitos reservados
+ * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
+ */
 require_once BASE_PATH . '/models/Matricula.php';
 require_once BASE_PATH . '/controllers/AuthController.php';
 
@@ -13,11 +17,22 @@ class MatriculaController
         $this->model = new Matricula();
     }
 
+    public function listar()
+    {
+        $pagina = isset($_GET['pagina']) ? max(1, (int) $_GET['pagina']) : 1;
+        $limite = 10;
+
+        $matriculas = $this->model->listar($pagina, $limite);
+        $totalPaginas = $this->model->totalPaginas($limite);
+
+        include BASE_PATH . '/views/matriculas/listar.php';
+    }
+
     public function criar()
     {
+        $erro = $_GET['erro'] ?? null;
         $alunos = $this->model->listarAlunos();
         $turmas = $this->model->listarTurmas();
-        $erro = $_GET['erro'] ?? null;
 
         include BASE_PATH . '/views/matriculas/criar.php';
     }
@@ -25,8 +40,8 @@ class MatriculaController
     public function salvar()
     {
         try {
-            $this->model->matricular($_POST['aluno_id'], $_POST['turma_id']);
-            header('Location: index.php?page=alunos&action=listar');
+            $this->model->salvar($_POST);
+            header('Location: index.php?page=matriculas&action=listar');
             exit;
         } catch (Exception $e) {
             $erro = $e->getMessage();
@@ -36,27 +51,10 @@ class MatriculaController
         }
     }
 
-    public function listarPorTurma()
+    public function excluir()
     {
-        if (!isset($_GET['turma_id'])) {
-            echo "<h3>Turma não especificada.</h3>";
-            return;
-        }
-
-        $turmaId = (int) $_GET['turma_id'];
-        $alunos = $this->model->listarPorTurma($turmaId);
-        include BASE_PATH . '/views/matriculas/listar.php';
-    }
-
-    public function listarPorAluno()
-    {
-        $alunoId = $_GET['id'] ?? null;
-        if (!$alunoId) {
-            echo "<h3>ID do aluno não especificado.</h3>";
-            return;
-        }
-
-        $turmas = $this->model->listarTurmasDoAluno($alunoId);
-        include BASE_PATH . '/views/matriculas/turmas-do-aluno.php';
+        $this->model->excluir($_GET['id']);
+        header('Location: index.php?page=matriculas&action=listar');
+        exit;
     }
 }

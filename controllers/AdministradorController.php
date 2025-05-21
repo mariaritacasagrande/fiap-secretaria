@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Sistema desenvolvido por Maria Rita Casagrande
+ * © 2025 Maria Rita Casagrande - Todos os direitos reservados
+ * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
+ */
 require_once BASE_PATH . '/models/Administrador.php';
 require_once BASE_PATH . '/controllers/AuthController.php';
 
@@ -15,8 +19,12 @@ class AdministradorController
 
     public function listar()
     {
-        $erro = $_GET['erro'] ?? null;
-        $admins = $this->model->todos();
+        $pagina = isset($_GET['pagina']) ? max(1, (int) $_GET['pagina']) : 1;
+        $limite = 10;
+
+        $administradores = $this->model->listar($pagina, $limite);
+        $totalPaginas = $this->model->totalPaginas($limite);
+
         include BASE_PATH . '/views/administradores/listar.php';
     }
 
@@ -29,10 +37,6 @@ class AdministradorController
     public function salvar()
     {
         try {
-            if (empty($_POST['senha']) || strlen($_POST['senha']) < 8) {
-                throw new Exception("A senha deve conter no mínimo 8 caracteres.");
-            }
-
             $this->model->salvar($_POST);
             header('Location: index.php?page=administradores&action=listar');
             exit;
@@ -44,46 +48,20 @@ class AdministradorController
 
     public function editar()
     {
-        $id = $_GET['id'] ?? null;
-        $admin = $this->model->buscarPorId($id);
-
-        if (!$admin) {
-            header('Location: index.php?page=administradores&action=listar&erro=Administrador+não+encontrado');
-            exit;
-        }
-
-        $erro = $_GET['erro'] ?? null;
+        $administrador = $this->model->buscarPorId($_GET['id']);
         include BASE_PATH . '/views/administradores/editar.php';
     }
 
     public function atualizar()
     {
-        try {
-            if (!empty($_POST['senha']) && strlen($_POST['senha']) < 8) {
-                throw new Exception("A nova senha deve conter no mínimo 8 caracteres.");
-            }
-
-            $this->model->atualizar($_POST);
-            header('Location: index.php?page=administradores&action=listar');
-            exit;
-        } catch (Exception $e) {
-            $erro = $e->getMessage();
-            $admin = $this->model->buscarPorId($_POST['id']);
-            include BASE_PATH . '/views/administradores/editar.php';
-        }
+        $this->model->atualizar($_POST['id'], $_POST);
+        header('Location: index.php?page=administradores&action=listar');
+        exit;
     }
 
     public function excluir()
     {
-        $id = $_GET['id'];
-        if ($id == $_SESSION['admin_id']) {
-            $erro = "Você não pode excluir seu próprio perfil.";
-            $admins = $this->model->todos();
-            include BASE_PATH . '/views/administradores/listar.php';
-            return;
-        }
-
-        $this->model->excluir($id);
+        $this->model->excluir($_GET['id']);
         header('Location: index.php?page=administradores&action=listar');
         exit;
     }

@@ -52,4 +52,4 @@ INSERT INTO matriculas (aluno_id, turma_id) VALUES
 (1, 1);
 
 INSERT INTO admins (nome, email, senha) VALUES
-('Administrador FIAP', 'admin@fiap.com.br', '$2y$10$K4qsMViScb38FZnJkLx6NeJGEi76f9kgrISQ5RxYFHzJfTXR63wTe');
+('Administrador FIAP', 'admin@fiap.com.br', '$2y$10$1qczTvkaGfbyiwSl66NAi.lLgKM1HkVjqY4LnbRBzW4ftno7XEMLi');

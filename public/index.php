@@ -1,4 +1,10 @@
 <?php
+/**
+ * Sistema desenvolvido por Maria Rita Casagrande
+ * © 2025 Maria Rita Casagrande - Todos os direitos reservados
+ * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
+ */
+
 // Habilita exibição de erros (desabilitar em produção)
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -20,7 +26,7 @@ require_once BASE_PATH . '/routes.php';
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Estilo adicional opcional -->
+    <!-- Estilo adicional -->
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -30,7 +36,7 @@ require_once BASE_PATH . '/routes.php';
 </head>
 <body>
 
-    <!-- O conteúdo dinâmico será carregado pelas rotas -->
+   
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
