@@ -1,16 +1,12 @@
 <?php
 
-require_once 'config/Database.php';
-require_once 'models/Aluno.php';
+require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../models/Aluno.php';
 
 echo "<h1>TESTES DO MODELO ALUNO</h1>";
 
-// Conexão com o banco
-$db = new Database();
-$conn = $db->connect();
-
-// Instancia o modelo com a conexão
-$alunoModel = new Aluno($conn);
+// Instancia o modelo (a conexão é feita internamente)
+$alunoModel = new Aluno();
 
 // Teste 1: buscar aluno por ID
 echo "<h2>Teste: buscarPorId(1)</h2>";
