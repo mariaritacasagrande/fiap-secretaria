@@ -36,7 +36,7 @@ class AuthController
 
         if ($admin && password_verify($senha, $admin['senha'])) {
             $_SESSION['admin_logado'] = true;
-            $_SESSION['admin_id'] = $admin['id']; // agora definido corretamente
+            $_SESSION['admin_id'] = $admin['id'];
             $_SESSION['admin_nome'] = $admin['nome'];
             header('Location: index.php?page=alunos&action=listar');
             exit;

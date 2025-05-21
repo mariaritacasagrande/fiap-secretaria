@@ -1,4 +1,9 @@
 <?php
+/**
+ * Sistema desenvolvido por Maria Rita Casagrande
+ * © <?= date('Y') ?> - Todos os direitos reservados
+ * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
+ */
 
 require_once BASE_PATH . '/models/Turma.php';
 require_once BASE_PATH . '/controllers/AuthController.php';
