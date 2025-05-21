@@ -1,77 +1,68 @@
+<?php
+require_once '../../config/auth.php';
+require_once '../../controllers/AlunoController.php';
+require_once '../../controllers/TurmaController.php';
+
+$pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
+
+$alunoController = new AlunoController();
+$turmaController = new TurmaController();
+
+$alunos = $alunoController->buscarPorNome($pesquisa); // método a ser implementado no controller
+$turmas = $turmaController->listar();
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Nova Matrícula - FIAP Secretaria</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Nova Matrícula</title>
+    <link rel="stylesheet" href="../../public/css/style.css">
+    <link rel="stylesheet" href="../../public/css/responsivo.css">
 </head>
-<body class="bg-light">
-<?php include BASE_PATH . '/views/partials/header.php'; ?>
+<body>
+    <?php include '../layouts/header.php'; ?>
 
-<div class="container-fluid px-4">
-    <h1 class="mb-4 fs-3">Nova Matrícula</h1>
+    <main class="container">
+        <h1>Criar Nova Matrícula</h1>
 
-    <?php if (!empty($erro)) : ?>
-        <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
-    <?php endif; ?>
+        <form method="GET" action="criar.php" class="form-inline mb-3">
+            <label for="pesquisa">Buscar aluno:</label>
+            <input type="text" id="pesquisa" name="pesquisa" value="<?= htmlspecialchars($pesquisa, ENT_QUOTES, 'UTF-8') ?>">
+            <button type="submit">Buscar</button>
+        </form>
 
-    <form method="POST" action="index.php?page=matriculas&action=criar" class="bg-white p-4 rounded shadow-sm">
+        <form action="../../controllers/MatriculaController.php" method="POST">
+            <input type="hidden" name="acao" value="criar">
 
-        <div class="mb-3">
-            <label for="filtroAluno" class="form-label">Buscar Aluno</label>
-            <input type="text" id="filtroAluno" class="form-control" placeholder="Digite para filtrar por nome">
-        </div>
+            <div class="form-group">
+                <label for="aluno_id">Aluno:</label>
+                <select name="aluno_id" id="aluno_id" required>
+                    <option value="">Selecione um aluno</option>
+                    <?php foreach ($alunos as $aluno): ?>
+                        <option value="<?= $aluno['id'] ?>">
+                            <?= htmlspecialchars($aluno['nome'], ENT_QUOTES, 'UTF-8') ?> (<?= htmlspecialchars($aluno['email'] ?? '-', ENT_QUOTES, 'UTF-8') ?>)
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-        <div class="mb-3">
-            <label for="aluno_id" class="form-label">Aluno</label>
-            <select name="aluno_id" id="aluno_id" class="form-select" required>
-                <option value="">Selecione um aluno</option>
-                <?php foreach ($alunos as $aluno): ?>
-                    <?php
-                        $nome = htmlspecialchars($aluno['nome'] ?? 'Aluno sem nome');
-                        $email = isset($aluno['email']) ? ' (' . htmlspecialchars($aluno['email']) . ')' : '';
-                    ?>
-                    <option value="<?= $aluno['id'] ?>">
-                        <?= $nome . $email ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="turma_id">Turma:</label>
+                <select name="turma_id" id="turma_id" required>
+                    <option value="">Selecione uma turma</option>
+                    <?php foreach ($turmas as $turma): ?>
+                        <option value="<?= $turma['id'] ?>">
+                            <?= htmlspecialchars($turma['nome'], ENT_QUOTES, 'UTF-8') ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-        <div class="mb-3">
-            <label for="turma_id" class="form-label">Turma</label>
-            <select name="turma_id" id="turma_id" class="form-select" required>
-                <option value="">Selecione uma turma</option>
-                <?php foreach ($turmas as $turma): ?>
-                    <option value="<?= $turma['id'] ?>">
-                        <?= htmlspecialchars($turma['nome']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+            <button type="submit" class="btn">Matricular</button>
+        </form>
+    </main>
 
-        <div class="d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-success">Matricular</button>
-            <a href="index.php?page=matriculas&action=listar" class="btn btn-secondary">Cancelar</a>
-        </div>
-    </form>
-</div>
-
-<script>
-    // Filtro de opções do select por nome
-    document.getElementById('filtroAluno').addEventListener('keyup', function () {
-        var filtro = this.value.toLowerCase();
-        var select = document.getElementById('aluno_id');
-        var options = select.getElementsByTagName('option');
-
-        for (var i = 1; i < options.length; i++) {
-            var texto = options[i].textContent.toLowerCase();
-            options[i].style.display = texto.includes(filtro) ? '' : 'none';
-        }
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include '../layouts/footer.php'; ?>
 </body>
 </html>
