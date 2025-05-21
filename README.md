@@ -89,6 +89,25 @@ fiap-secretaria/
 - Senhas armazenadas com `bcrypt`
 - Proteção contra SQL Injection via `PDO` com `bindParam`
 
+## 🧪 Testes Manuais
+
+O projeto inclui um teste básico para validar o funcionamento do modelo `Aluno`.
+
+### Como rodar o teste:
+
+1. Acesse o navegador e vá para:
+   ```
+   http://localhost/fiap-secretaria/testes/testar_aluno.php
+   ```
+
+2. Esse teste cobre:
+   - Busca de aluno pelo ID 1
+   - Listagem completa de alunos cadastrados
+
+### Observações:
+- O teste utiliza o modelo real e o banco de dados configurado no projeto.
+- Ideal para validação local antes de deploy ou integração.
+
 ##  Observações
 
 - As datas de nascimento são armazenadas no formato ISO (`YYYY-MM-DD`) e exibidas como `DD-MM-AAAA`.
