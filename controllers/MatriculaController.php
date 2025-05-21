@@ -4,6 +4,7 @@
  * © 2025 Maria Rita Casagrande - Todos os direitos reservados
  * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
  */
+
 require_once BASE_PATH . '/models/Matricula.php';
 require_once BASE_PATH . '/controllers/AuthController.php';
 
@@ -21,43 +22,27 @@ class MatriculaController
     {
         $pagina = isset($_GET['pagina']) ? max(1, (int) $_GET['pagina']) : 1;
         $limite = 10;
+        $turmaId = isset($_GET['turma_id']) ? (int) $_GET['turma_id'] : null;
 
-        $matriculas   = $this->model->listar($pagina, $limite);
-        $totalPaginas = $this->model->totalPaginas($limite);
+        $matriculas = $this->model->listar($pagina, $limite, $turmaId);
+        $totalPaginas = $this->model->totalPaginas($limite, $turmaId);
 
         include BASE_PATH . '/views/matriculas/listar.php';
     }
 
     public function criar()
     {
-        $erro   = $_GET['erro'] ?? null;
-        $alunos = $this->model->listarAlunos();
-        $turmas = $this->model->listarTurmas();
-
         include BASE_PATH . '/views/matriculas/criar.php';
     }
 
     public function salvar()
     {
-        // Checa duplicidade antes de tentar salvar
-        $alunoId = $_POST['aluno_id']   ?? null;
-        $turmaId = $_POST['turma_id']   ?? null;
-        if ($this->model->existe((int)$alunoId, (int)$turmaId)) {
-            $erro   = 'Este aluno já está matriculado nesta turma.';
-            $alunos = $this->model->listarAlunos();
-            $turmas = $this->model->listarTurmas();
-            include BASE_PATH . '/views/matriculas/criar.php';
-            return;
-        }
-
         try {
             $this->model->salvar($_POST);
             header('Location: index.php?page=matriculas&action=listar');
             exit;
         } catch (Exception $e) {
-            $erro   = $e->getMessage();
-            $alunos = $this->model->listarAlunos();
-            $turmas = $this->model->listarTurmas();
+            $erro = $e->getMessage();
             include BASE_PATH . '/views/matriculas/criar.php';
         }
     }
