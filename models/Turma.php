@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Sistema desenvolvido por Maria Rita Casagrande
  * © 2025 Maria Rita Casagrande - Todos os direitos reservados
@@ -9,13 +10,14 @@ require_once __DIR__ . '/../config/Database.php';
 
 class Turma
 {
-    public function todas()
+    public function todas($pagina = 1, $limite = 10)
     {
-        return $this->listar();
+        return $this->listar($pagina, $limite);
     }
 
-    public function listar()
+    public function listar($pagina = 1, $limite = 10)
     {
+        $offset = ($pagina - 1) * $limite;
         $conn = (new Database())->connect();
         $query = "
             SELECT 
@@ -25,8 +27,12 @@ class Turma
             LEFT JOIN matriculas m ON m.turma_id = t.id
             GROUP BY t.id
             ORDER BY t.nome ASC
+            LIMIT :limite OFFSET :offset
         ";
-        $stmt = $conn->query($query);
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
