@@ -1,42 +1,28 @@
 <?php
-
 $page = $_GET['page'] ?? 'alunos';
 $action = $_GET['action'] ?? 'listar';
 
-switch ($page) {
-    case 'alunos':
-        require_once BASE_PATH . '/controllers/AlunoController.php';
-        $controller = new AlunoController();
-        break;
+$controller = new AlunoController();
 
-    case 'turmas':
-        require_once BASE_PATH . '/controllers/TurmaController.php';
-        $controller = new TurmaController();
+switch ("{$page}.{$action}") {
+    case 'alunos.listar':
+        $controller->listar();
         break;
-
-    case 'matriculas':
-        require_once BASE_PATH . '/controllers/MatriculaController.php';
-        $controller = new MatriculaController();
+    case 'alunos.criar':
+        $controller->criar();
         break;
-
-    case 'auth':
-        require_once BASE_PATH . '/controllers/AuthController.php';
-        $controller = new AuthController();
+    case 'alunos.editar':
+        $controller->editar();
         break;
-
-    case 'administradores':
-        require_once BASE_PATH . '/controllers/AdministradorController.php';
-        $controller = new AdministradorController();
+    case 'alunos.salvar':
+        $controller->salvar();
         break;
-
+    case 'alunos.atualizar':
+        $controller->atualizar();
+        break;
+    case 'alunos.excluir':
+        $controller->excluir();
+        break;
     default:
         echo "Página não encontrada.";
-        exit;
 }
-
-if (!method_exists($controller, $action)) {
-    echo "Ação '{$action}' não definida para '{$page}'.";
-    exit;
-}
-
-$controller->$action();

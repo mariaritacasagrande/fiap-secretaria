@@ -61,28 +61,9 @@ class AdministradorController {
 
     public function excluir() {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-
-        // Regra 1: Não permitir excluir o administrador principal (ID 1)
-        if ($id === 1) {
-            $erro = "O administrador principal não pode ser excluído.";
-            $administradores = $this->model->buscarTodos();
-            include __DIR__ . '/../views/administradores/listar.php';
-            return;
-        }
-
-        // Regra 2: Não permitir excluir se houver apenas 1 administrador
-        $todos = $this->model->buscarTodos();
-        if (count($todos) <= 1) {
-            $erro = "Não é possível excluir o último administrador do sistema.";
-            $administradores = $todos;
-            include __DIR__ . '/../views/administradores/listar.php';
-            return;
-        }
-
         if ($id > 0) {
             $this->model->excluir($id);
         }
-
         header('Location: index.php?page=administradores&action=listar');
         exit;
     }
