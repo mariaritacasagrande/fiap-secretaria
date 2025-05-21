@@ -8,12 +8,14 @@
 
         <div class="mb-3">
             <label for="nome" class="form-label">Nome</label>
-            <input type="text" name="nome" id="nome" class="form-control" value="<?= htmlspecialchars($administrador['nome']) ?>" required>
+            <input type="text" name="nome" id="nome" class="form-control"
+                value="<?= htmlspecialchars($administrador['nome']) ?>" required>
         </div>
 
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control" value="<?= htmlspecialchars($administrador['email']) ?>" required>
+            <input type="email" name="email" id="email" class="form-control"
+                value="<?= htmlspecialchars($administrador['email']) ?>" required>
         </div>
 
         <div class="mb-3">
