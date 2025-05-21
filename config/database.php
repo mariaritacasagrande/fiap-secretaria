@@ -2,7 +2,7 @@
 
 /**
  * Sistema desenvolvido por Maria Rita Casagrande
- * © <?= date('Y') ?> - Todos os direitos reservados
+ * © 2025 Maria Rita Casagrande - Todos os direitos reservados
  * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
  */
 
