@@ -49,7 +49,7 @@
 
     <a href="index.php?page=turmas&action=listar" class="btn btn-secondary mt-3">Voltar às Turmas</a>
 </div>
-
+<?php include BASE_PATH . '/views/partials/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

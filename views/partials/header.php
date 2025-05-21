@@ -28,17 +28,19 @@ if (session_status() === PHP_SESSION_NONE) {
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?page=matriculas&action=criar">Nova Matrícula</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=administradores&action=listar">Administradores</a>
-                </li>
+                
             </ul>
 
             <div class="d-flex align-items-center flex-wrap gap-2">
-                <a href="<?php echo 'index.php?page=administradores&action=editar&id=' . ($_SESSION['admin_id'] ?? 0); ?>"
-                   class="text-decoration-none text-muted small">
-                    Olá, <strong><?php echo htmlspecialchars($_SESSION['admin_nome'] ?? 'Administrador'); ?></strong>
-                </a>
-                <a href="index.php?page=auth&action=logout" class="btn btn-outline-danger btn-sm">Sair</a>
+                <?php if (!empty($_SESSION['admin_logado']) && !empty($_SESSION['admin_id']) && !empty($_SESSION['admin_nome'])): ?>
+                    <a href="index.php?page=administradores&action=editar&id=<?= htmlspecialchars($_SESSION['admin_id']) ?>"
+                       class="text-decoration-none text-muted small">
+                        Olá, <strong><?= htmlspecialchars($_SESSION['admin_nome']) ?></strong>
+                    </a>
+                    <a href="index.php?page=auth&action=logout" class="btn btn-outline-danger btn-sm">Sair</a>
+                <?php else: ?>
+                    <a href="index.php?page=auth&action=login" class="btn btn-outline-primary btn-sm">Entrar</a>
+                <?php endif; ?>
             </div>
         </div>
     </div>

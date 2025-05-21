@@ -1,52 +1,56 @@
 <?php
-// models/Administrador.php
 
-function buscarTodosAdministradores()
-{
-    global $pdo;
-    $sql = "SELECT * FROM administradores";
-    $stmt = $pdo->query($sql);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+require_once __DIR__ . '/../config/database.php';
 
-function buscarAdministradorPorId($id)
-{
-    global $pdo;
-    $sql = "SELECT * FROM administradores WHERE id = ?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id]);
-    return $stmt->fetch(PDO::FETCH_ASSOC); // pode retornar false
-}
+class Administrador {
 
-function criarAdministrador($nomeCompleto, $senha)
-{
-    global $pdo;
-    $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-    $sql = "INSERT INTO administradores (nome_completo, senha) VALUES (?, ?)";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute([$nomeCompleto, $senhaHash]);
-}
+    private $conn;
 
-function atualizarAdministrador($id, $nomeCompleto, $senha = null)
-{
-    global $pdo;
-
-    if ($senha) {
-        $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-        $sql = "UPDATE administradores SET nome_completo = ?, senha = ? WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$nomeCompleto, $senhaHash, $id]);
-    } else {
-        $sql = "UPDATE administradores SET nome_completo = ? WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$nomeCompleto, $id]);
+    public function __construct() {
+        $database = new Database();
+        $this->conn = $database->connect();
     }
-}
 
-function excluirAdministrador($id)
-{
-    global $pdo;
-    $sql = "DELETE FROM administradores WHERE id = ?";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute([$id]);
+    public function buscarTodos() {
+        $stmt = $this->conn->prepare("SELECT * FROM admins");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function buscarPorId($id) {
+        $stmt = $this->conn->prepare("SELECT * FROM admins WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function inserir($nome, $email, $senha) {
+        $hash = password_hash($senha, PASSWORD_DEFAULT);
+        $stmt = $this->conn->prepare("INSERT INTO admins (nome, email, senha) VALUES (:nome, :email, :senha)");
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':senha', $hash);
+        return $stmt->execute();
+    }
+
+    public function atualizar($id, $nome, $email, $senha = null) {
+        if ($senha) {
+            $hash = password_hash($senha, PASSWORD_DEFAULT);
+            $stmt = $this->conn->prepare("UPDATE admins SET nome = :nome, email = :email, senha = :senha WHERE id = :id");
+            $stmt->bindParam(':senha', $hash);
+        } else {
+            $stmt = $this->conn->prepare("UPDATE admins SET nome = :nome, email = :email WHERE id = :id");
+        }
+
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function excluir($id) {
+        $stmt = $this->conn->prepare("DELETE FROM admins WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 }

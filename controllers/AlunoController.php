@@ -41,21 +41,14 @@ class AlunoController
     public function editar()
     {
         $aluno = $this->model->buscarPorId($_GET['id']);
-        $erro = $_GET['erro'] ?? null;
         include BASE_PATH . '/views/alunos/editar.php';
     }
 
     public function atualizar()
     {
-        try {
-            $this->model->atualizar($_POST);
-            header('Location: index.php?page=alunos&action=listar');
-            exit;
-        } catch (Exception $e) {
-            $erro = $e->getMessage();
-            $aluno = $this->model->buscarPorId($_POST['id']);
-            include BASE_PATH . '/views/alunos/editar.php';
-        }
+        $this->model->atualizar($_POST);
+        header('Location: index.php?page=alunos&action=listar');
+        exit;
     }
 
     public function excluir()

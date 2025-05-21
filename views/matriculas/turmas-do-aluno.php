@@ -34,5 +34,7 @@
     <?php endif; ?>
 
     <a href="index.php?page=alunos&action=listar" class="btn btn-secondary mt-3">Voltar à lista de alunos</a>
+
+    <?php include BASE_PATH . '/views/partials/footer.php'; ?>
 </body>
 </html>
