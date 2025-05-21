@@ -3,7 +3,7 @@
 <div class="container-fluid px-4">
     <h1 class="mb-4 fs-3">Editar Turma</h1>
 
-    <?php if (!empty($erro)) : ?>
+    <?php if (!empty($erro)): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
     <?php endif; ?>
 
@@ -12,12 +12,14 @@
 
         <div class="mb-3">
             <label for="nome" class="form-label">Nome da Turma</label>
-            <input type="text" name="nome" id="nome" class="form-control" value="<?= htmlspecialchars($turma['nome'] ?? '') ?>" required minlength="3">
+            <input type="text" name="nome" id="nome" class="form-control"
+                value="<?= htmlspecialchars($turma['nome'] ?? '') ?>" required minlength="3">
         </div>
 
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição</label>
-            <textarea name="descricao" id="descricao" class="form-control" rows="4" required><?= htmlspecialchars($turma['descricao'] ?? '') ?></textarea>
+            <textarea name="descricao" id="descricao" class="form-control" rows="4"
+                required><?= htmlspecialchars($turma['descricao'] ?? '') ?></textarea>
         </div>
 
         <div class="d-flex flex-wrap gap-2">
