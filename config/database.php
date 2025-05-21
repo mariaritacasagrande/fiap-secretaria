@@ -5,7 +5,6 @@
 * © 2025 Maria Rita Casagrande - Todos os direitos reservados
 * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
 */
-
 class Database {
     private $host = "localhost";
     private $db_name = "fiap_secretaria";
