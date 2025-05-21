@@ -4,24 +4,22 @@ require_once __DIR__ . '/../config/Database.php';
 
 class Aluno
 {
-    private $conn;
-
-    public function __construct($conn = null)
+    public function todos()
     {
-        $this->conn = $conn ?? (new Database())->connect();
+        return $this->listar();
     }
 
     public function listar()
     {
-        $query = "SELECT * FROM alunos ORDER BY nome ASC";
-        $stmt = $this->conn->query($query);
+        $conn = (new Database())->connect();
+        $stmt = $conn->query("SELECT * FROM alunos ORDER BY nome ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function buscarPorId($id)
     {
-        $query = "SELECT * FROM alunos WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
+        $conn = (new Database())->connect();
+        $stmt = $conn->prepare("SELECT * FROM alunos WHERE id = :id");
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -29,9 +27,10 @@ class Aluno
 
     public function salvar($dados)
     {
+        $conn = (new Database())->connect();
         $query = "INSERT INTO alunos (nome, data_nascimento, cpf, email, senha) 
                   VALUES (:nome, :data_nascimento, :cpf, :email, :senha)";
-        $stmt = $this->conn->prepare($query);
+        $stmt = $conn->prepare($query);
         $stmt->bindValue(':nome', $dados['nome']);
         $stmt->bindValue(':data_nascimento', $dados['data_nascimento']);
         $stmt->bindValue(':cpf', $dados['cpf']);
@@ -42,6 +41,7 @@ class Aluno
 
     public function atualizar($id, $dados)
     {
+        $conn = (new Database())->connect();
         $query = "UPDATE alunos SET nome = :nome, data_nascimento = :data_nascimento, cpf = :cpf, email = :email";
 
         if (!empty($dados['senha'])) {
@@ -49,7 +49,7 @@ class Aluno
         }
 
         $query .= " WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
+        $stmt = $conn->prepare($query);
         $stmt->bindValue(':nome', $dados['nome']);
         $stmt->bindValue(':data_nascimento', $dados['data_nascimento']);
         $stmt->bindValue(':cpf', $dados['cpf']);
@@ -65,8 +65,8 @@ class Aluno
 
     public function excluir($id)
     {
-        $query = "DELETE FROM alunos WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
+        $conn = (new Database())->connect();
+        $stmt = $conn->prepare("DELETE FROM alunos WHERE id = :id");
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
