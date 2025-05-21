@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Sistema desenvolvido por Maria Rita Casagrande
  * © 2025 Maria Rita Casagrande - Todos os direitos reservados
@@ -35,6 +36,15 @@ class Aluno
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function buscarPorNome($nome)
+    {
+        $conn = (new Database())->connect();
+        $stmt = $conn->prepare("SELECT * FROM alunos WHERE nome LIKE :nome ORDER BY nome ASC");
+        $stmt->bindValue(':nome', "%$nome%", PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function salvar($dados)
