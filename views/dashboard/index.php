@@ -6,7 +6,47 @@ include BASE_PATH . '/views/partials/header_dashboard.php';
 <div class="container py-4">
     <h1 class="mb-4 fs-3 text-center">Dashboard Geral</h1>
 
-    <!-- Formulário de busca -->
+    <!-- Cards de acesso rápido lado a lado menores -->
+    <div class="row row-cols-2 row-cols-md-4 g-3 mb-3 text-center">
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body py-3">
+                    <div class="mb-2"><i class="bi bi-people fs-3 text-primary"></i></div>
+                    <h6 class="card-title small">Alunos</h6>
+                    <a href="index.php?page=alunos&action=listar" class="btn btn-outline-primary btn-sm">Ver</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body py-3">
+                    <div class="mb-2"><i class="bi bi-journal-text fs-3 text-success"></i></div>
+                    <h6 class="card-title small">Turmas</h6>
+                    <a href="index.php?page=turmas&action=listar" class="btn btn-outline-primary btn-sm">Ver</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body py-3">
+                    <div class="mb-2"><i class="bi bi-pencil-square fs-3 text-warning"></i></div>
+                    <h6 class="card-title small">Matrículas</h6>
+                    <a href="index.php?page=matriculas&action=listar" class="btn btn-outline-primary btn-sm">Ver</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body py-3">
+                    <div class="mb-2"><i class="bi bi-person-badge fs-3 text-danger"></i></div>
+                    <h6 class="card-title small">Administradores</h6>
+                    <a href="index.php?page=administradores&action=listar" class="btn btn-outline-primary btn-sm">Ver</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulário de busca abaixo dos cards -->
     <div class="mb-4">
         <form id="form-busca-aluno" class="d-flex" onsubmit="return false;">
             <input type="text" id="input-nome-aluno" class="form-control me-2" placeholder="Buscar aluno por nome...">
@@ -16,46 +56,6 @@ include BASE_PATH . '/views/partials/header_dashboard.php';
 
     <!-- Resultados AJAX -->
     <div id="resultado-busca-aluno" class="row g-3 mb-5"></div>
-
-    <!-- Cards de acesso rápido -->
-    <div class="row g-4 justify-content-center">
-        <div class="col-12 col-md-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-center">Alunos</h5>
-                    <p class="card-text flex-grow-1 text-center">Total de alunos cadastrados.</p>
-                    <a href="index.php?page=alunos&action=listar" class="btn btn-primary mt-auto align-self-center">Ver Alunos</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-center">Turmas</h5>
-                    <p class="card-text flex-grow-1 text-center">Total de turmas criadas.</p>
-                    <a href="index.php?page=turmas&action=listar" class="btn btn-primary mt-auto align-self-center">Ver Turmas</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-center">Matrículas</h5>
-                    <p class="card-text flex-grow-1 text-center">Total de matrículas efetuadas.</p>
-                    <a href="index.php?page=matriculas&action=listar" class="btn btn-primary mt-auto align-self-center">Ver Matrículas</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-center">Administradores</h5>
-                    <p class="card-text flex-grow-1 text-center">Total de administradores ativos.</p>
-                    <a href="index.php?page=administradores&action=listar" class="btn btn-primary mt-auto align-self-center">Ver Admins</a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>
