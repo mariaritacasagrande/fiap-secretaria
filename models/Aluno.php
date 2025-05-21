@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Sistema desenvolvido por Maria Rita Casagrande
  * © 2025 Maria Rita Casagrande - Todos os direitos reservados

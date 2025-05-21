@@ -16,14 +16,7 @@
         <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
     <?php endif; ?>
 
-    <form id="formMatricula" method="POST" action="index.php?page=matriculas&action=salvar" class="bg-white p-4 rounded shadow-sm">
-
-        <div class="mb-3">
-            <label class="form-label" for="filtroAluno">Buscar Aluno</label>
-            <input type="text" id="filtroAluno" class="form-control" placeholder="Digite para filtrar por nome">
-            <div class="form-text text-muted mt-1">Digite pelo menos 3 letras e tecle Enter para aplicar o filtro.</div>
-        </div>
-
+    <form action="index.php?page=matriculas&action=salvar" method="POST">
         <div class="mb-3">
             <label for="aluno_id" class="form-label">Aluno</label>
             <select name="aluno_id" id="aluno_id" class="form-select" required>
@@ -55,17 +48,8 @@
             </select>
         </div>
 
-        <!-- Mensagem de validação de matrícula duplicada -->
-        <?php if (!empty($erro) && strpos($erro, 'já está matriculado') !== false): ?>
-            <div class="form-text text-danger mb-3">
-                <?= htmlspecialchars($erro) ?>
-            </div>
-        <?php endif; ?>
-
-        <div class="d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-success">Matricular</button>
-            <a href="index.php?page=matriculas&action=listar" class="btn btn-secondary">Cancelar</a>
-        </div>
+        <button type="submit" class="btn btn-success">Matricular</button>
+        <a href="index.php?page=alunos&action=listar" class="btn btn-secondary">Voltar</a>
     </form>
 </div>
 
