@@ -17,18 +17,21 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($administradores)) : ?>
-                    <?php foreach ($administradores as $admin) : ?>
+                <?php if (!empty($administradores)): ?>
+                    <?php foreach ($administradores as $admin): ?>
                         <tr>
                             <td><?= htmlspecialchars($admin['nome']) ?></td>
                             <td><?= htmlspecialchars($admin['email']) ?></td>
                             <td>
-                                <a href="index.php?page=administradores&action=editar&id=<?= $admin['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                                <a href="index.php?page=administradores&action=excluir&id=<?= $admin['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este administrador?')">Excluir</a>
+                                <a href="index.php?page=administradores&action=editar&id=<?= $admin['id'] ?>"
+                                    class="btn btn-sm btn-warning">Editar</a>
+                                <a href="index.php?page=administradores&action=excluir&id=<?= $admin['id'] ?>"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Tem certeza que deseja excluir este administrador?')">Excluir</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else : ?>
+                <?php else: ?>
                     <tr>
                         <td colspan="3" class="text-center">Nenhum administrador cadastrado.</td>
                     </tr>
