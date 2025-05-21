@@ -20,10 +20,25 @@ class AdministradorController {
             $nome = $_POST['nome'] ?? '';
             $email = $_POST['email'] ?? '';
             $senha = $_POST['senha'] ?? '';
+
+            // Validação reforçada de senha
+            if (
+                strlen($senha) < 8 ||
+                !preg_match('/[a-z]/', $senha) ||          // letra minúscula
+                !preg_match('/[A-Z]/', $senha) ||          // letra maiúscula
+                !preg_match('/[0-9]/', $senha) ||          // número
+                in_array(strtolower($senha), ['12345678', 'admin123', 'senha123', '123mudar', 'admin', '123456'])
+            ) {
+                $erro = "A senha deve ter pelo menos 8 caracteres, incluir letras maiúsculas, minúsculas e números, e não ser trivial.";
+                include __DIR__ . '/../views/administradores/criar.php';
+                return;
+            }
+
             $this->model->inserir($nome, $email, $senha);
             header('Location: index.php?page=administradores&action=listar');
             exit;
         }
+
         include __DIR__ . '/../views/administradores/criar.php';
     }
 
@@ -39,6 +54,22 @@ class AdministradorController {
             $nome = $_POST['nome'] ?? '';
             $email = $_POST['email'] ?? '';
             $senha = $_POST['senha'] ?? null;
+
+            if ($senha) {
+                if (
+                    strlen($senha) < 8 ||
+                    !preg_match('/[a-z]/', $senha) ||
+                    !preg_match('/[A-Z]/', $senha) ||
+                    !preg_match('/[0-9]/', $senha) ||
+                    in_array(strtolower($senha), ['12345678', 'admin123', 'senha123', '123mudar', 'admin', '123456'])
+                ) {
+                    $admin = $this->model->buscarPorId($id);
+                    $erro = "A nova senha deve ter pelo menos 8 caracteres, incluir letras maiúsculas, minúsculas e números, e não ser trivial.";
+                    include __DIR__ . '/../views/administradores/editar.php';
+                    return;
+                }
+            }
+
             $this->model->atualizar($id, $nome, $email, $senha);
             header('Location: index.php?page=administradores&action=listar');
             exit;
@@ -61,9 +92,26 @@ class AdministradorController {
 
     public function excluir() {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $todos = $this->model->buscarTodos();
+
+        if ($id === 1) {
+            $erro = "O administrador principal não pode ser excluído.";
+            $administradores = $todos;
+            include __DIR__ . '/../views/administradores/listar.php';
+            return;
+        }
+
+        if (count($todos) <= 1) {
+            $erro = "Não é possível excluir o último administrador do sistema.";
+            $administradores = $todos;
+            include __DIR__ . '/../views/administradores/listar.php';
+            return;
+        }
+
         if ($id > 0) {
             $this->model->excluir($id);
         }
+
         header('Location: index.php?page=administradores&action=listar');
         exit;
     }
