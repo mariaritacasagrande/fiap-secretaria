@@ -12,6 +12,10 @@
 <div class="container-fluid px-4">
     <h1 class="mb-4 fs-3">Administradores</h1>
 
+    <?php if (!empty($erro)) : ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
+    <?php endif; ?>
+
     <a href="index.php?page=administradores&action=criar" class="btn btn-success mb-3">Novo Administrador</a>
 
     <div class="table-responsive">
@@ -35,7 +39,12 @@
                             <td><?= htmlspecialchars($admin['email']) ?></td>
                             <td class="text-center">
                                 <a href="index.php?page=administradores&action=editar&id=<?= htmlspecialchars($admin['id']) ?>" class="btn btn-sm btn-primary">Editar</a>
-                                <a href="index.php?page=administradores&action=excluir&id=<?= htmlspecialchars($admin['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente excluir?')">Excluir</a>
+                                
+                                <?php if (count($administradores) > 1 && $admin['id'] != 1): ?>
+                                    <a href="index.php?page=administradores&action=excluir&id=<?= htmlspecialchars($admin['id']) ?>"
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Tem certeza que deseja excluir este administrador?')">Excluir</a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
