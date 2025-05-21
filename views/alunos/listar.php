@@ -23,7 +23,7 @@
                     <?php foreach ($alunos as $aluno): ?>
                         <tr>
                             <td><?= htmlspecialchars($aluno['nome']) ?></td>
-                            <td><?= htmlspecialchars($aluno['data_nascimento']) ?></td>
+                            <td><?= date('d-m-Y', strtotime($aluno['data_nascimento'])) ?></td>
                             <td><?= htmlspecialchars($aluno['cpf']) ?></td>
                             <td><?= htmlspecialchars($aluno['email']) ?></td>
                             <td>
