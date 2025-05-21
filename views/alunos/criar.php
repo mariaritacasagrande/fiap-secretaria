@@ -77,23 +77,23 @@
         const mensagem = document.getElementById('mensagemSemResultados');
         let encontrou = false;
 
-        // Esconde todas as opções
+        // Oculta todas as opções
         for (let i = 0; i < options.length; i++) {
             options[i].style.display = 'none';
         }
 
-        // Se menos de 3 caracteres, reseta e sai sem mostrar nada
+        // Se filtro muito curto, não faz nada
         if (filtro.length < 3) {
             mensagem.classList.add('d-none');
             select.selectedIndex = -1;
             return;
         }
 
-        // Exibe opção padrão e reseta seleção
+        // Exibe a primeira opção padrão
         options[0].style.display = '';
         select.selectedIndex = 0;
 
-        // Filtra alunos
+        // Aplica o filtro
         for (let i = 1; i < options.length; i++) {
             const texto = options[i].textContent.toLowerCase();
             const match = texto.includes(filtro);
@@ -101,12 +101,17 @@
             if (match) encontrou = true;
         }
 
-        // Exibe ou oculta mensagem de "nenhum encontrado"
+        // Mostra ou esconde mensagem
         mensagem.classList.toggle('d-none', encontrou);
 
-        // Força a validação do select apenas após ENTER e filtro válido
-        select.setCustomValidity('');
-        select.reportValidity();
+        // Somente força a validação se houver resultados
+        if (encontrou) {
+            select.setCustomValidity('');
+            select.reportValidity();
+        } else {
+            // Impede que o required cause alerta se não há o que selecionar
+            select.setCustomValidity(''); // limpa erros anteriores
+        }
     }
 </script>
 
