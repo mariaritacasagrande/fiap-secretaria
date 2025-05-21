@@ -19,20 +19,23 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($alunos)) : ?>
-                    <?php foreach ($alunos as $aluno) : ?>
+                <?php if (!empty($alunos)): ?>
+                    <?php foreach ($alunos as $aluno): ?>
                         <tr>
                             <td><?= htmlspecialchars($aluno['nome']) ?></td>
                             <td><?= htmlspecialchars($aluno['data_nascimento']) ?></td>
                             <td><?= htmlspecialchars($aluno['cpf']) ?></td>
                             <td><?= htmlspecialchars($aluno['email']) ?></td>
                             <td>
-                                <a href="index.php?page=alunos&action=editar&id=<?= $aluno['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                                <a href="index.php?page=alunos&action=excluir&id=<?= $aluno['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este aluno?')">Excluir</a>
+                                <a href="index.php?page=alunos&action=editar&id=<?= $aluno['id'] ?>"
+                                    class="btn btn-sm btn-warning">Editar</a>
+                                <a href="index.php?page=alunos&action=excluir&id=<?= $aluno['id'] ?>"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Tem certeza que deseja excluir este aluno?')">Excluir</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else : ?>
+                <?php else: ?>
                     <tr>
                         <td colspan="5" class="text-center">Nenhum aluno cadastrado.</td>
                     </tr>
