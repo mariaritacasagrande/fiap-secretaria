@@ -1,89 +1,63 @@
 <?php
 
-require_once BASE_PATH . '/config/database.php';
+require_once __DIR__ . '/../config/Database.php';
 
 class Aluno
 {
     private $conn;
 
-    public function __construct()
+    public function __construct($conn = null)
     {
-        $db = new Database();
-        $this->conn = $db->connect();
+        $this->conn = $conn ?? (new Database())->connect();
     }
 
-    public function todos($nome = null)
+    public function listar()
     {
-        if ($nome) {
-            $sql = "SELECT * FROM alunos WHERE nome LIKE :nome ORDER BY nome ASC";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindValue(':nome', '%' . $nome . '%', PDO::PARAM_STR);
-        } else {
-            $sql = "SELECT * FROM alunos ORDER BY nome ASC";
-            $stmt = $this->conn->prepare($sql);
-        }
-
-        $stmt->execute();
+        $query = "SELECT * FROM alunos ORDER BY nome ASC";
+        $stmt = $this->conn->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function buscarPorId($id)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM alunos WHERE id = :id");
-        $stmt->bindValue(':id', $id);
+        $query = "SELECT * FROM alunos WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    private function senhaValida($senha)
-    {
-        return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z0-9]).{8,}$/', $senha);
-    }
-
     public function salvar($dados)
     {
-        if (!$this->senhaValida($dados['senha'])) {
-            throw new Exception("A senha deve conter no mínimo 8 caracteres, incluindo letra maiúscula, minúscula, número e símbolo.");
-        }
-
-        $senhaCriptografada = password_hash($dados['senha'], PASSWORD_DEFAULT);
-
-        $sql = "INSERT INTO alunos (nome, data_nascimento, cpf, email, senha)
-                VALUES (:nome, :data_nascimento, :cpf, :email, :senha)";
-
-        $stmt = $this->conn->prepare($sql);
+        $query = "INSERT INTO alunos (nome, data_nascimento, cpf, email, senha) 
+                  VALUES (:nome, :data_nascimento, :cpf, :email, :senha)";
+        $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':nome', $dados['nome']);
         $stmt->bindValue(':data_nascimento', $dados['data_nascimento']);
         $stmt->bindValue(':cpf', $dados['cpf']);
         $stmt->bindValue(':email', $dados['email']);
-        $stmt->bindValue(':senha', $senhaCriptografada);
+        $stmt->bindValue(':senha', password_hash($dados['senha'], PASSWORD_DEFAULT));
         return $stmt->execute();
     }
 
-    public function atualizar($dados)
+    public function atualizar($id, $dados)
     {
-        $atualizarSenha = !empty($dados['senha']);
+        $query = "UPDATE alunos SET nome = :nome, data_nascimento = :data_nascimento, cpf = :cpf, email = :email";
 
-        if ($atualizarSenha && !$this->senhaValida($dados['senha'])) {
-            throw new Exception("A nova senha informada não atende os critérios mínimos de segurança.");
+        if (!empty($dados['senha'])) {
+            $query .= ", senha = :senha";
         }
 
-        $sql = "UPDATE alunos SET nome = :nome, data_nascimento = :data_nascimento, cpf = :cpf, email = :email";
-        if ($atualizarSenha) {
-            $sql .= ", senha = :senha";
-        }
-        $sql .= " WHERE id = :id";
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':id', $dados['id']);
+        $query .= " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':nome', $dados['nome']);
         $stmt->bindValue(':data_nascimento', $dados['data_nascimento']);
         $stmt->bindValue(':cpf', $dados['cpf']);
         $stmt->bindValue(':email', $dados['email']);
+        $stmt->bindValue(':id', $id);
 
-        if ($atualizarSenha) {
-            $senhaCriptografada = password_hash($dados['senha'], PASSWORD_DEFAULT);
-            $stmt->bindValue(':senha', $senhaCriptografada);
+        if (!empty($dados['senha'])) {
+            $stmt->bindValue(':senha', password_hash($dados['senha'], PASSWORD_DEFAULT));
         }
 
         return $stmt->execute();
@@ -91,8 +65,9 @@ class Aluno
 
     public function excluir($id)
     {
-        $stmt = $this->conn->prepare("DELETE FROM alunos WHERE id = :id");
-        $stmt->bindValue(':id', $id);
+        $query = "DELETE FROM alunos WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
 }
