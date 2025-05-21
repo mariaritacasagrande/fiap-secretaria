@@ -39,6 +39,7 @@ fiap-secretaria/
 │   ├── turmas/             # CRUD de turmas
 │   └── partials/           # Cabeçalho e rodapé comuns
 ├── public/                 # Entrada principal (index.php) e chamadas AJAX
+├── testes/                 # Scripts de teste manual (testar_aluno.php)
 ├── routes.php              # Roteador central das páginas e ações
 ├── dump.sql                # Script SQL com estrutura e dados iniciais
 └── README.md               # Este arquivo
@@ -101,10 +102,10 @@ O projeto inclui um teste básico para validar o funcionamento do modelo `Aluno`
    ```
 
 2. Esse teste cobre:
-   - Busca de aluno pelo ID 1
-   - Listagem completa de alunos cadastrados
+- Busca de aluno pelo ID 1
+- Listagem completa de alunos cadastrados
 
-### Observações:
+### Importante:
 - O teste utiliza o modelo real e o banco de dados configurado no projeto.
 - Ideal para validação local antes de deploy ou integração.
 
@@ -113,6 +114,6 @@ O projeto inclui um teste básico para validar o funcionamento do modelo `Aluno`
 - As datas de nascimento são armazenadas no formato ISO (`YYYY-MM-DD`) e exibidas como `DD-MM-AAAA`.
 - O sistema foi desenvolvido como parte de um desafio técnico.
 
-## 📝 Licença
+## Licença
 
 © 2025 Maria Rita Casagrande - Todos os direitos reservados.
