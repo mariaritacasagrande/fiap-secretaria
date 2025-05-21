@@ -1,4 +1,10 @@
 <?php
+/**
+ * Sistema desenvolvido por Maria Rita Casagrande
+ * © <?= date('Y') ?> - Todos os direitos reservados
+ * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
+ */
+
 // Habilita exibição de erros (desabilitar em produção)
 ini_set('display_errors', 1);
 error_reporting(E_ALL);

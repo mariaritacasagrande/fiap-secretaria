@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * Sistema desenvolvido por Maria Rita Casagrande
+ * © <?= date('Y') ?> - Todos os direitos reservados
+ * Repositório: https://github.com/mariaritacasagrande/fiap-secretaria
+ */
+
 class Database {
     private $host = "localhost";
     private $db_name = "fiap_secretaria";
