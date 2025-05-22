@@ -90,7 +90,7 @@ fiap-secretaria/
 - Senhas armazenadas com `bcrypt`
 - Proteção contra SQL Injection via `PDO` com `bindParam`
 
-## 🧪 Testes Manuais
+## Testes Manuais
 
 O projeto inclui um teste básico para validar o funcionamento do modelo `Aluno`.
 
