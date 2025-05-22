@@ -1,4 +1,4 @@
-# FIAP Secretaria - Sistema de Gestão Acadêmica
+# 🎓 FIAP Secretaria - Sistema de Gestão Acadêmica
 
 Este sistema foi desenvolvido como parte do desafio técnico FIAP. A aplicação tem como objetivo permitir o gerenciamento de **alunos**, **turmas**, **matrículas** por parte de um administrador autenticado.
 
