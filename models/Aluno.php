@@ -92,4 +92,12 @@ class Aluno
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    // Método auxiliar usado na matrícula para buscar todos os alunos sem paginação
+    public function listarSemPaginacao()
+    {
+        $conn = (new Database())->connect();
+        $stmt = $conn->query("SELECT * FROM alunos ORDER BY nome ASC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

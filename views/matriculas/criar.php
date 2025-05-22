@@ -32,6 +32,12 @@
                 <label for="aluno_id" class="form-label">Aluno</label>
                 <?php
                 $alunoSelecionadoId = isset($_GET['aluno_id']) ? (int) $_GET['aluno_id'] : null;
+
+                if (!isset($alunos)) {
+                    require_once __DIR__ . '/../../models/Aluno.php';
+                    $alunoModel = new Aluno();
+                    $alunos = $alunoModel->listarSemPaginacao();
+                }
                 ?>
 
                 <select name="aluno_id" id="aluno_id" class="form-select" required>
@@ -40,7 +46,7 @@
                         <?php
                         $nome = htmlspecialchars($aluno['nome'] ?? 'Aluno sem nome');
                         $email = isset($aluno['email']) ? ' (' . htmlspecialchars($aluno['email']) . ')' : '';
-                        $selected = ($aluno['id'] == $alunoSelecionadoId) ? 'selected' : '';
+                        $selected = ((int) $aluno['id'] === $alunoSelecionadoId) ? 'selected' : '';
                         ?>
                         <option value="<?= $aluno['id'] ?>" <?= $selected ?>>
                             <?= $nome . $email ?>
@@ -64,7 +70,6 @@
                 </select>
             </div>
 
-            <!-- Mensagem de validação de matrícula duplicada -->
             <?php if (!empty($erro) && strpos($erro, 'já está matriculado') !== false): ?>
                 <div class="form-text text-danger mb-3">
                     <?= htmlspecialchars($erro) ?>
@@ -93,23 +98,19 @@
             const mensagem = document.getElementById('mensagemSemResultados');
             let encontrou = false;
 
-            // Oculta todas as opções
             for (let i = 0; i < options.length; i++) {
                 options[i].style.display = 'none';
             }
 
-            // Se filtro muito curto, não faz nada
             if (filtro.length < 3) {
                 mensagem.classList.add('d-none');
                 select.selectedIndex = -1;
                 return;
             }
 
-            // Exibe a primeira opção padrão
             options[0].style.display = '';
             select.selectedIndex = 0;
 
-            // Aplica o filtro
             for (let i = 1; i < options.length; i++) {
                 const texto = options[i].textContent.toLowerCase();
                 const match = texto.includes(filtro);
@@ -117,19 +118,17 @@
                 if (match) encontrou = true;
             }
 
-            // Mostra ou esconde mensagem
             mensagem.classList.toggle('d-none', encontrou);
 
-            // Somente força a validação se houver resultados
             if (encontrou) {
                 select.setCustomValidity('');
                 select.reportValidity();
             } else {
-                // Impede que o required cause alerta se não há o que selecionar
-                select.setCustomValidity(''); // limpa erros anteriores
+                select.setCustomValidity('');
             }
         }
     </script>
+
     <?php include BASE_PATH . '/views/partials/footer.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
